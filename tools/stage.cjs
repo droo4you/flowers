@@ -105,7 +105,7 @@ function validateSources(root = projectRoot) {
       fs.readFileSync(regularFile(root, relative)),
     ]),
   );
-  validateNotes(contents.get("notes.js").toString("utf8"));
+  if (contents.has("notes.js")) validateNotes(contents.get("notes.js").toString("utf8"));
   const checkResource = (resource, file) => {
     if (/^(?:#|data:|https:\/\/)/i.test(resource)) return null;
     if (/^(?:[a-z]+:|\/|\\)/i.test(resource)) {
