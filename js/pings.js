@@ -7,6 +7,7 @@
   let seed = 142;
   let plants = [];
   let plantLayer;
+  let rockBounds;
   const status = document.getElementById('garden-status');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const say = text => { status.textContent = text; };
@@ -38,18 +39,23 @@
       node('stop',{offset:'1','stop-color':colors[2]},g);
     });
     wash('ellipse',{cx:500,cy:644,rx:330,ry:32,fill:'var(--shadow)','fill-opacity':'.08'},0);
-    const body='M155 433 C155 703 845 703 845 433 C800 547 200 547 155 433Z';
+    const body='M125 433 C125 675 875 675 875 433 C830 547 170 547 125 433Z';
     wash('path',{d:body,fill:'url(#ceramic)'},.2);
     line(body,'#7d887b',1.4,.1);
-    wash('ellipse',{cx:500,cy:430,rx:345,ry:179,fill:'var(--rim)'},.35);
-    wash('ellipse',{cx:500,cy:427,rx:330,ry:164,fill:'var(--soil)'},.5);
-    line('M170 427 A330 164 0 1 0 830 427 A330 164 0 1 0 170 427','#8b9686',1,.6);
+    wash('ellipse',{cx:500,cy:430,rx:375,ry:184,fill:'var(--rim)'},.35);
+    wash('ellipse',{cx:500,cy:427,rx:360,ry:169,fill:'var(--soil)'},.5);
+    line('M140 427 A360 169 0 1 0 860 427 A360 169 0 1 0 140 427','#8b9686',1,.6);
     for(let i=0;i<1600;i++) {
-      const x=175+random()*650,y=265+random()*325;
-      if(((x-500)/322)**2+((y-427)/155)**2>1) continue;
+      const x=145+random()*710,y=265+random()*325;
+      if(((x-500)/352)**2+((y-427)/161)**2>1) continue;
       const r=2+random()*3;
       wash('ellipse',{cx:x,cy:y,rx:r,ry:r*.72,fill:random()>.5?'#454c42':'#242d29',stroke:'#697160','stroke-width':'.35'},.5+random()*.7);
     }
+    const rockStart = svg.children.length;
+    const rockX=445+Math.random()*110, rockY=325+Math.random()*25;
+    const rockScale=.68;
+    const rockTX=rockX-490*rockScale, rockTY=rockY-330*rockScale;
+    rockBounds={left:375*rockScale+rockTX,right:600*rockScale+rockTX,bottom:455*rockScale+rockTY};
     const rock='M383 410 C362 377 377 323 401 288 L435 210 Q447 178 467 198 L496 230 Q516 231 529 252 L561 286 Q577 312 588 351 L595 404 Q562 454 468 455 Q415 449 383 410Z';
     wash('path',{d:rock,fill:'var(--rock)',stroke:'#737c6b','stroke-width':1.4},1);
     line(rock,'#89917b',1.2,.8);
@@ -59,12 +65,15 @@
       line(`M${x} ${y}l${random()*5-2} ${random()*6}`,random()>.5?'#303d35':'#88907c',.6,1.1+random()*.8);
     }
     ['M449 220l-22 91 14 39-18 63','M505 255l-19 49 19 37-11 72','M552 312l-20 35 29 51'].forEach(d=>line(d,'#303e36',1,1.3));
+    const rockParts=[...svg.children].slice(rockStart);
+    const rockGroup=node('g',{id:'rock',transform:`translate(${rockTX} ${rockTY}) scale(${rockScale})`});
+    rockParts.forEach(el=>rockGroup.appendChild(el));
     // Small loose threads of moss, with room for the rosettes.
     for(let i=0;i<95;i++) {
       const a=random()*Math.PI*2,x=500+Math.cos(a)*(130+random()*150),y=435+Math.sin(a)*(65+random()*75);
       line(`M${x} ${y}q-5 -8 2 -13m-2 8l7 -4m-7 1l-6 -4`,'#8b9564',.85,1.5+random());
     }
-    line('M187 475 C251 615 743 632 815 478','#ffffff',2,1.3);
+
     plantLayer=node('g', {id:'plants'});
     seed = Date.now() >>> 0;
     say('Tap the dark soil to plant your first ping.');
@@ -120,10 +129,10 @@
   }
   function fits(x,y,size) {
     // Reserve the rock and keep the entire mature rosette inside the soil.
-    if(x+size>375 && x-size<600 && y-size*.79<455) return false;
+    if(x+size>rockBounds.left && x-size<rockBounds.right && y-size*.79<rockBounds.bottom) return false;
     for(let i=0;i<12;i++) {
       const a=i*Math.PI/6;
-      if(((x+Math.cos(a)*size-500)/316)**2+((y+Math.sin(a)*size*.79-427)/150)**2>1)return false;
+      if(((x+Math.cos(a)*size-500)/344)**2+((y+Math.sin(a)*size*.79-427)/159)**2>1)return false;
     }
     return plants.every(p=>Math.hypot(x-p.x,(y-p.y)/.79)>size+p.size+7);
   }
@@ -145,7 +154,7 @@
     const matrix=svg.getScreenCTM();
     if(!matrix)return;
     const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());
-    if(((point.x-500)/330)**2+((point.y-427)/164)**2>1)return;
+    if(((point.x-500)/360)**2+((point.y-427)/169)**2>1)return;
     plantAt(point.x,point.y);
   });
   document.getElementById('plant').addEventListener('click',()=>{
