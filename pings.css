@@ -5,3 +5,5 @@ main{max-width:1440px;margin:auto;padding:28px 6vw 22px}header,footer,.garden-bo
 #garden{touch-action:manipulation}.ping{cursor:pointer;outline:none}.ping:focus-visible>.hit-area{stroke:var(--ink);stroke-width:2;stroke-dasharray:3 4}.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.garden-bottom{max-width:780px;gap:16px;flex-wrap:wrap}.garden-bottom button{font-size:11px}#garden-status{text-align:center;font:12px/1.6 system-ui,sans-serif;color:var(--muted);min-height:40px;margin:20px auto 0;max-width:480px}[hidden]{display:none!important}@media(max-width:600px){.garden-bottom{justify-content:center}.botanical{width:100%;text-align:center}.garden-space{margin-bottom:30px}#garden-status{font-size:11px}}
 
 body{overflow-x:clip}
+
+:root{--ceramic-shade:#c0c6b5}[data-theme=dark]{--ceramic-shade:#7f9284}

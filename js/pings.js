@@ -28,9 +28,10 @@
     plants = [];
     svg.querySelectorAll(':scope > :not(title):not(desc)').forEach(el => el.remove());
     const defs = node('defs', {});
-    const bowl = node('linearGradient', {id:'ceramic',x1:0,y1:0,x2:0,y2:1}, defs);
+    const bowl = node('linearGradient', {id:'ceramic',x1:'15%',y1:'0%',x2:'78%',y2:'100%'}, defs);
     node('stop', {offset:'0%', 'stop-color':'var(--rim)'}, bowl);
-    node('stop', {offset:'100%', 'stop-color':'var(--bowl)'}, bowl);
+    node('stop', {offset:'48%', 'stop-color':'var(--bowl)'}, bowl);
+    node('stop', {offset:'100%', 'stop-color':'var(--ceramic-shade)'}, bowl);
     const palette = [ ['#c2d68f','#7d9b62','#d09caa'], ['#d6c799','#b3be86','#c47e94'], ['#dbb1b7','#aeb77f','#b77290'], ['#bfa1cc','#9e8aaf','#835f9c'], ['#b9d995','#79a471','#96b77c'] ];
     palette.forEach((colors, i) => {
       const g=node('radialGradient',{id:`leaf${i}`,cx:'.44',cy:'.8',r:'.85'},defs);
@@ -38,10 +39,14 @@
       node('stop',{offset:'.66','stop-color':colors[0]},g);
       node('stop',{offset:'1','stop-color':colors[2]},g);
     });
-    wash('ellipse',{cx:500,cy:644,rx:330,ry:32,fill:'var(--shadow)','fill-opacity':'.08'},0);
-    const body='M125 433 C125 675 875 675 875 433 C830 547 170 547 125 433Z';
+    wash('ellipse',{cx:508,cy:752,rx:276,ry:30,fill:'var(--shadow)','fill-opacity':'.06'},0);
+    wash('ellipse',{cx:500,cy:747,rx:152,ry:17,fill:'var(--shadow)','fill-opacity':'.13'},.1);
+    wash('ellipse',{cx:500,cy:730,rx:129,ry:23,fill:'var(--ceramic-shade)',stroke:'#9aa394','stroke-width':1},.25);
+    const body='M125 430 C139 587 252 710 390 730 C460 746 540 746 610 730 C748 710 861 587 875 430 A375 184 0 0 1 125 430Z';
     wash('path',{d:body,fill:'url(#ceramic)'},.2);
-    line(body,'#7d887b',1.4,.1);
+    line(body,'#8f998b',1.2,.1);
+    line('M161 512 C195 611 293 688 409 708','var(--rim)',3,.7);
+    line('M391 730 Q500 752 609 730','#97a18f',1,.8);
     wash('ellipse',{cx:500,cy:430,rx:375,ry:184,fill:'var(--rim)'},.35);
     wash('ellipse',{cx:500,cy:427,rx:360,ry:169,fill:'var(--soil)'},.5);
     line('M140 427 A360 169 0 1 0 860 427 A360 169 0 1 0 140 427','#8b9686',1,.6);
